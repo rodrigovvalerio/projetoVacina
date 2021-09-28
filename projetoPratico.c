@@ -1,153 +1,107 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
 
-void cadastro(int *criaId, char *criaNome[][100], char *criaEmail[][100], char *criaSexo[][100], char *criaEndereco[][100], double *criaAltura, bool *criaVacina);
-void id(int *id);
-void nome(char *nome[][100], int userCount);
-void email(char *email[][100], int userCount);
-void sexo(char *sexo[][100], int userCount);
-void endereco(char *endereco[][100], int userCount);
-void altura(double *altura, int userCount);
-void vacina(bool *vacina, int userCount);
-void mostrarPerfil(int idBuscado, int *mostraId, char *mostraNome[][100], char *mostraEmail[][100], char *mostraSexo[][100], char *mostraEndereco[][100], double *mostraAltura, bool *mostraVacina);
-void editar(int *editarId, char *editarNome[][100], char *editarEmail[][100], char *editarSexo[][100], char *editarEndereco[][100], double *editarAltura, bool *editarVacina);
-void excluir(int *excluirId, char *excluirNome[][100], char *excluirEmail[][100], char *excluirSexo[][100], char *excluirEndereco[][100], double *excluirAltura, bool *excluirVacina);
-int buscarId(int *idBusca, char *nomeBuscar[][100], char *emailBusca[][100], char sexoBuscar[][100], char *enderecoBuscar[][100], double *alturaBuscar, bool *vacinaBusca);
-int buscarEmail(int *idBusca, char *nomeBuscar[][100], char *emailBusca[][100], char sexoBuscar[][100], char *enderecoBuscar[][100], double *alturaBuscar, bool *vacinaBusca);
-void mostraTodos(int *mostraId, char *mostraNome[][100], char *mostraEmail[][100], char *mostraSexo[][100], char *mostraEndereco[][100], double *mostraAltura, bool *mostraVacina);
-void backup(int backupOption, int *id, char *nome[][100], char *email[][100], char *sexo[][100], char *endereco[][100], double *altura, bool *vacina, int *backupId);
+//Variáveis globais
+int IDUser[1000]; //Randômico
+char nomeUser[1000], sexoUser[1000][100], enderecoUser[1000][100], emailUser[1000[100]];
+char adressUser[1000][70];
+bool vacinaUser[1000];
+double alturaUser[1000];
+int quantidadeUser;
+int pontoVetorEmail;
+int pontoVetorID;
+char emailUser[1000];//Checar se há o caractere `@`
+char sexoUser[1000];//Apenas palavras completas, sem abreviações - Feminino - Masculino - Não Declarado
+float alturaUser[1000];//Entre 1m a 2m
+//Fim das variáveis globais
+
+//Declaração das funções
+void createID(int *id);
+int menu();
+void cadastraUser(int *criaIDUser, char *criaNomeUser[][100], char *criaEmailUser[][100], char *criaSexoUser[][100], char *criaEnderecoUser[][100], double *criaAlturaUser, bool *criaVacinaUser);
+int editUser(int *editarIdUser, char *editarNomeUser[][100], char *editarEmailUser[][100], char *editarSexoUser[][100], char *editarEnderecoUser[][100], double *editarAlturaUser, bool *editarVacinaUser);
+int excludeUser(int *excluirIdUser, char *excluirNomeUser[][100], char *excluirEmailUser[][100], char *excluirSexoUser[][100], char *excluirEnderecoUser[][100], double *excluirAlturaUser, bool *excluirVacinaUser);
+int printUser();
+int backupUser();
+int restoreUser();
+int buscaUser();
+int validaEmail();
+int validaID();
+int buscaEmail();
+int encerra();
+int buscaID();
 int userNumeber = 0;
+//Término de declaração de variáveis
 
-int main()
-{
-    int id[1000], option = 0, backupOption, validaBackup = 0, backupId[1000];
-    char nome[1000][100], email[1000][100], sexo[1000][100], endereco[1000][100];
-    double altura[1000];
-    bool vacina[1000];
-    do
-    {
+//Criação das funções
+int createID(){//criar o ID randômicamente
 
-        system("cls");
-        printf("1-Criar usuario\n");
-        printf("2-Edita usuario\n");
-        printf("3-Excluir usuario\n");
-        printf("4-Buscar por id\n");
-        printf("5-Buscar por email\n");
-        printf("6-Imprimir todos os usuarios\n");
-        printf("7-Backup\n");
-        printf("8-Sair\n");
-        scanf("%d", &option);
-        switch (option)
-        {
-        case 1:
-            cadastro(id, nome, email, sexo, endereco, altura, vacina);
-            break;
-        case 2:
-            editar(id, nome, email, sexo, endereco, altura, vacina);
-
-            break;
-        case 3:
-            excluir(id, nome, email, sexo, endereco, altura, vacina);
-            break;
-        case 4:
-            buscarId(id, nome, email, sexo, endereco, altura, vacina);
-            break;
-        case 5:
-            buscarEmail(id, nome, email, sexo, endereco, altura, vacina);
-            break;
-        case 6:
-            mostraTodos(id, nome, email, sexo, endereco, altura, vacina);
-            break;
-        case 7:
-            do
-            {
-                do
-                {
-                    system("cls");
-                    printf("1-Criar Backup\n");
-                    printf("2-recuperar Backup\n");
-                    printf("3-Voltar\n");
-                    printf("Digite um opcao: ");
-                    scanf("%d", &backupOption);
-                } while (backupOption < 1 || backupOption > 3);
-                if (backupOption == 1)
-                {
-                    printf("backup realizado com sucesso!!!\n");
-                    system("pause");
-                    backup(backupOption, id, nome, email, sexo, endereco, altura, vacina, backupId);
-                    validaBackup == 1;
-                }
-                else if (backupOption == 2)
-                {
-                    printf("backup restaurado com sucesso!!!\n");
-                    system("pause");
-                    backup(backupOption, id, nome, email, sexo, endereco, altura, vacina, backupId);
-                }
-                else if (backupOption == 2 && validaBackup != 1)
-                {
-                    printf("Nao tem backup salvo!\n");
-                }
-                else if (backupOption != 3)
-                {
-                    system("cls");
-                    printf("Opcao invalida!! digite novamente");
-                    system("pause");
-                }
-            } while (backupOption != 3);
-            break;
-        default:
-            printf("Opcao invalida!! digite novamente");
-            system("pause");
-            system("cls");
-            break;
-        }
-        printf("passou");
-    } while (option > 1 || option < 7);
-    printf("passou2");
-    system("pause");
+    return 0;
 }
-void cadastro(int *criaId, char *criaNome[][100], char *criaEmail[][100], char *criaSexo[][100], char *criaEndereco[][100], double *criaAltura, bool *criaVacina)
-{
-    int option;
+
+int menu(){//Menu
+    int escolha;
+
+    printf("Bem vindo ao menu\nEscolha a opcao que deseja");
+    printf("Digite 1 - Caso queira registrar novos usuarios\nDigite 2 - Caso queira editar algum usuario\nDigite 3 - Caso queira procurar um usuario\nDigite 4 - Caso queira excluir algum usuario\nDigite 5 - Caso queira restaurar algum usuario\nDigite 6 - Caso queira encerrar a sessao");
+    scanf("%d", &escolha);
+
+    switch (escolha){
+     case 1:
+         cadastraUser(IDUser, nomeUser, emailUser, sexoUser, enderecoUser, alturaUser, vacinaUser);
+         break;
+     case 2:
+         editUser(IDUser, nomeUser, emailUser, sexoUser, enderecoUser, alturaUser, vacinaUser);
+           break;
+    case 3:
+         buscaUser(IDUser, nomeUser, emailUser, sexoUser, enderecoUser, alturaUser, vacinaUser);
+         break;
+    case 4:
+        excludeUser(IDUser, nomeUser, emailUser, sexoUser, enderecoUser, alturaUser, vacinaUser);
+        break;
+    case 5:
+        restoreUser(IDUser, nomeUser, emailUser, sexoUser, enderecoUser, alturaUser, vacinaUser);
+        break;
+    case 6:
+        encerra(IDUser, nomeUser, emailUser, sexoUser, enderecoUser, alturaUser, vacinaUser);
+        break;
+    
+    default:
+        printf("Opcao invalida\nTente novamente");
+        break;
+    }
+
+    return 0;
+}
+
+void cadastraUser(int *criaIDUser, char *criaNomeUser[][100], char *criaEmailUser[][100], char *criaSexoUser[][100], char *criaEnderecoUser[][100], double *criaAlturaUser, bool *criaVacinaUser)
+{//Cadastrar o usuário 
+   int option;
     do
     {
         system("cls");
-        printf("_________________Cadastro_________________\n");
+        printf("******Cadastro******\n");
         id(criaId);
-        nome(criaNome, userNumeber);
-        email(criaEmail, userNumeber);
-        sexo(criaSexo, userNumeber);
-        endereco(criaEndereco, userNumeber);
-        altura(criaAltura, userNumeber);
-        vacina(criaVacina, userNumeber);
+        nome(criaNomeUser, userNumeber);
+        email(criaEmailUser, userNumeber);
+        sexo(criaSexoUser, userNumeber);
+        endereco(criaEnderecoUser, userNumeber);
+        altura(criaAlturaUser, userNumeber);
+        vacina(criaVacinaUser, userNumeber);
         printf("\n___________________________________________\n");
-        mostrarPerfil(userNumeber, criaId, criaNome, criaEmail, criaSexo, criaEndereco, criaAltura, criaVacina);
+        mostrarPerfil(userNumeber, criaIDUser, criaNomeUser, criaEmailUser, criaSexoUser, criaEnderecoUser, criaAlturaUser, criaVacinaUser);
         system("cls");
         userNumeber++;
         do
         {
-            printf("Deseja cadastra outro usuario(1-sim, 2-nao):");
+            printf("Gostaria de cadastrar outro usuario?(1-sim, 2-nao):");
             scanf("%d", &option);
         } while (option < 1 || option > 2);
     } while (option == 1);
 }
-
-void id(int *id)
-{
-    srand(time(NULL));
-    id[userNumeber] = (rand() % (999999 - 100000 + 100000) + 100000);
-    for (int i = 0; i < userNumeber; i++)
-    {
-        if (id[userNumeber] == id[i])
-        {
-            id[userNumeber] = (rand() % (999999 - 100000 + 100000) + 100000);
-            i = 0;
-        }
-    }
-}
-void nome(char *nome[][100], int userCount)
+void nomeUser(char *nome[][100], int userCount)
 {
     do
     {
@@ -156,7 +110,7 @@ void nome(char *nome[][100], int userCount)
         fgets(nome[userCount], 100, stdin);
     } while (strlen(nome[userCount]) < 2);
 }
-void email(char *email[][100], int userCount)
+void emailUser (char *email[][100], int userCount)
 {
     do
     {
@@ -164,7 +118,7 @@ void email(char *email[][100], int userCount)
         fgets(email[userCount], 100, stdin);
     } while (strchr(email[userCount], '@') == NULL);
 }
-void sexo(char *sexo[][100], int userCount)
+void sexoUser (char *sexo[][100], int userCount)
 {
     int option = 1;
     do
@@ -178,7 +132,7 @@ void sexo(char *sexo[][100], int userCount)
         }
     } while (option == 1);
 }
-void endereco(char *endereco[][100], int userCount)
+void enderecoUser(char *endereco[][100], int userCount)
 {
     do
     {
@@ -187,7 +141,7 @@ void endereco(char *endereco[][100], int userCount)
         fgets(endereco[userCount], 100, stdin);
     } while (strlen(endereco[userCount]) < 2);
 }
-void altura(double *altura, int userCount)
+void alturaUser(double *altura, int userCount)
 {
     do
     {
@@ -195,7 +149,7 @@ void altura(double *altura, int userCount)
         scanf("%lf", &altura[userCount]);
     } while (altura[userCount] < 1 || altura[userCount] > 2);
 }
-void vacina(bool *vacina, int userCount)
+void vacinaUser(bool *vacina, int userCount)
 {
     int option = 1;
     char validaVacina[10];
@@ -217,241 +171,129 @@ void vacina(bool *vacina, int userCount)
     } while (option == 1);
 }
 
-void mostrarPerfil(int idBuscado, int *mostraId, char *mostraNome[][100], char *mostraEmail[][100], char *mostraSexo[][100], char *mostraEndereco[][100], double *mostraAltura, bool *mostraVacina)
-{
-    system("cls");
-    printf("_______________________________________________\n");
-    printf("O id do usuario: %d\n", mostraId[idBuscado]);
-    printf("O nome do usuario: %s\n", mostraNome[idBuscado]);
-    printf("O email do usuario: %s\n", mostraEmail[idBuscado]);
-    printf("O sexo do usuario: %s\n", mostraSexo[idBuscado]);
-    printf("O endereco do usuario: %s\n", mostraEndereco[idBuscado]);
-    printf("O altura do usuario: %lf\n", mostraAltura[idBuscado]);
-    if (mostraVacina[idBuscado] == true)
-    {
-        printf("O usuario tomou a vacina\n");
-    }
-    else
-    {
-        printf("O usuario nao tomou a vacina\n");
-    }
-    printf("\n__________________________________________________\n");
-    system("pause");
+int excludeUser(){//Excluir os dados do usuário
+
+    return 0;
 }
 
-void editar(int *editarId, char *editarNome[][100], char *editarEmail[][100], char *editarSexo[][100], char *editarEndereco[][100], double *editarAltura, bool *editarVacina)
-{
-    int option, userCount;
-    do
-    {
-        system("cls");
-        printf("_________________Editar___________________\n");
-        do
-        {
-            printf("buscar usuario:\n");
-            printf("1-por ID\n");
-            printf("2-por Email\n");
-            printf("3-volta\n");
-            printf("Digite uma opcao valida:");
-            scanf("%d", &option);
-        } while (option < 1 || option > 3);
-        if (option == 1)
-        {
-            userCount = buscarId(editarId, editarNome, editarEmail, editarSexo, editarEndereco, editarAltura, editarVacina);
-        }
-        else if (option == 2)
-        {
-            userCount = buscarEmail(editarId, editarNome, editarEmail, editarSexo, editarEndereco, editarAltura, editarVacina);
-        }
-        else
-        {
-            return;
-        }
+int printUser(){//Printar na tela limpa os dados do usuário
 
-        do
-        {
-            system("cls");
-            printf("1-Nome\n");
-            printf("2-Email\n");
-            printf("3-Sexo\n");
-            printf("4-Endereco\n");
-            printf("5-Altura\n");
-            printf("6-Vacina\n");
-            printf("7-Volta\n");
-            printf("Digite a opcao que deseja alterar:");
-            scanf("%d", &option);
-        } while (option < 1 || option > 7);
-        if (option == 1)
-        {
-            nome(editarNome, userCount);
-        }
-        else if (option == 2)
-        {
-            email(editarEmail, userCount);
-        }
-        else if (option == 3)
-        {
-            sexo(editarSexo, userCount);
-        }
-        else if (option == 4)
-        {
-            endereco(editarEndereco, userCount);
-        }
-        else if (option == 5)
-        {
-            altura(editarAltura, userCount);
-        }
-        else if (option == 6)
-        {
-            vacina(editarVacina, userCount);
-        }
-        else
-        {
-            return;
-        }
-        mostrarPerfil(userCount, editarId, editarNome, editarEmail, editarSexo, editarEndereco, editarAltura, editarVacina);
-        do
-        {
-            system("cls");
-            printf("deseja edita outro usuario(1-sim 2-nao):");
-            scanf("%d", &option);
-        } while (option < 1 || option > 2);
-    } while (option == 1);
+    return 0;
 }
-void excluir(int *excluirId, char *excluirNome[][100], char *excluirEmail[][100], char *excluirSexo[][100], char *excluirEndereco[][100], double *excluirAltura, bool *excluirVacina)
-{
-    int option, userCount;
-    do
-    {
-        do
-        {
-            printf("buscar usuario:\n");
-            printf("1-por ID\n");
-            printf("2-por Email\n");
-            printf("3-volta\n");
-            printf("Digite uma opcao valida: ");
-            scanf("%d", &option);
-            fflush(stdin);
-        } while (option < 1 || option > 3);
-        if (option == 1)
-        {
-            userCount = buscarId(excluirId, excluirNome, excluirEmail, excluirSexo, excluirEndereco, excluirAltura, excluirVacina);
-        }
-        else if (option == 2)
-        {
-            userCount = buscarEmail(excluirId, excluirNome, excluirEmail, excluirSexo, excluirEndereco, excluirAltura, excluirVacina);
-        }
-        else
-        {
-            return;
-        }
-        for (userCount; userCount < userNumeber; userCount)
-        {
-            excluirId[userCount] = excluirId[++userCount];
-            strcpy(excluirNome[userCount], excluirNome[++userCount]);
-            strcpy(excluirEmail[userCount], excluirEmail[++userCount]);
-            strcpy(excluirSexo[userCount], excluirSexo[++userCount]);
-            strcpy(excluirEndereco[userCount], excluirEndereco[++userCount]);
-            excluirAltura[userCount] = excluirAltura[++userCount];
-            excluirVacina[userCount] = excluirVacina[++userCount];
-        }
-        userNumeber--;
-        do
-        {
-            system("cls");
-            printf("deseja edita outro usuario(1-sim 2-nao):");
-            scanf("%d", &option);
-        } while (option < 1 || option > 2);
-    } while (option == 1);
+
+int backupUser(){//Salvar os dados do usuário num backup
+
+    return 0;
 }
-int buscarId(int *idBusca, char *nomeBuscar[][100], char *emailBusca[][100], char sexoBuscar[][100], char *enderecoBuscar[][100], double *alturaBuscar, bool *vacinaBusca)
-{
-    int idEscolhido, option;
-    do
-    {
-        printf("Digite o ID do usuario: ");
-        scanf("%d", &idEscolhido);
-        fflush(stdin);
-        for (int i = 0; i < userNumeber; i++)
-        {
-            if (idBusca[i] == idEscolhido)
+
+int restoreUser(){//Restaurar os dados do usuário salvos no backup
+
+    return 0;
+}
+
+int buscaUser(){//Responsavel por buscar os dados do usuario
+    int escolha;
+
+    printf("Deseja encontrar o usuario atraves do e-mail (1) ou atraves do ID (2)?");
+    scanf("%d", &escolha);
+
+    switch (escolha){
+    case 1:
+        buscaEmail();
+
+        if (buscaEmail == 1){
+            printf("E-mail nao presente no banco de dados");
+            menu();
+        }
+        break;
+        
+    case 2:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
+
+    return 0;
+}
+
+int validaEmail(){//Valida se há @ no email
+
+    return 0;
+}
+
+int buscaEmail(){//Busca nos dados se há um email igual
+    char emailBusca;
+    int escolha;
+
+    do{
+        printf("Qual o e-mail?");
+        scanf("%s", emailBusca);
+
+        validaEmail();
+
+        if (validaEmail == 1){
+            printf("E-mail invalido\n");
+            printf("Deseja voltar ao menu (1) ou tentar novamente (2)?");
+            scanf("%d", &escolha);
+
+            switch (escolha)
             {
-                mostrarPerfil(i, idBusca, nomeBuscar, emailBusca, sexoBuscar, enderecoBuscar, alturaBuscar, vacinaBusca);
-                return i;
+            case 1:
+                menu();
+                break;
+            case 2:
+                buscaEmail();
+                break;
+            
+            default: 
+                break;
             }
         }
-        do
-        {
-            printf("id invalido!");
-            printf("Deseja tenta novamente(1-sim 2-nao):");
-            scanf("%d", &option);
-        } while (option < 1 || option > 2);
-    } while (option == 1);
-}
-int buscarEmail(int *idBusca, char *nomeBuscar[][100], char *emailBusca[][100], char sexoBuscar[][100], char *enderecoBuscar[][100], double *alturaBuscar, bool *vacinaBusca)
-{
-    int option;
-    char emailEscolido[100];
-    do
-    {
-        printf("Digite o email do usuario: ");
-        fflush(stdin);
-        fgets(emailEscolido, 100, stdin);
-        for (int i = 0; i < userNumeber; i++)
-        {
-            if (stricmp(emailEscolido, emailBusca[i]) == 0)
-            {
-                mostrarPerfil(i, idBusca, nomeBuscar, emailBusca, sexoBuscar, enderecoBuscar, alturaBuscar, vacinaBusca);
-                return i;
-            }
+        
+    } while (validaEmail == 1);
+
+    for (int i = 0; i != quantidadeUser; i++){
+        if (emailBusca == emailUser[i]){
+            pontoVetorEmail = i;
         }
-        do
-        {
-            printf("email invalido!");
-            printf("Deseja tenta novamente(1-sim 2-nao):");
-            scanf("%d", &option);
-        } while (option < 1 || option > 2);
-    } while (option == 1);
+    }
+    return pontoVetorEmail;
 }
-void mostraTodos(int *mostraId, char *mostraNome[][100], char *mostraEmail[][100], char *mostraSexo[][100], char *mostraEndereco[][100], double *mostraAltura, bool *mostraVacina)
-{
-    for (int i = 0; i < userNumeber; i++)
-    {
-        mostrarPerfil(i, mostraId, mostraNome, mostraEmail, mostraSexo, mostraEndereco, mostraAltura, mostraVacina);
+
+int buscaID(){//Busca nos dados se há um ID igual
+    int IDBusca;
+
+    printf("Qual o ID?");
+    scanf("%d", &IDBusca);
+
+    for (int i = 0; i != quantidadeUser; i++){
+        if (IDBusca == IDUser[i]){
+            pontoVetorID = i;
+        }
+        else{
+        printf("Valor n encontrado");
+        }
     }
+
+    return pontoVetorID;
 }
-void backup(int backupOption, int *id, char *nome[][100], char *email[][100], char *sexo[][100], char *endereco[][100], double *altura, bool *vacina, int *backupId)
-{
-    int backupUserNumber;
-    char backupNome[1000][100], backupEmail[1000][100], backupSexo[1000][100], backupEndereco[1000][100];
-    double backupAltura[1000];
-    bool backupVacina[1000];
-    if (backupOption == 1)
-    {
-        for (int i = 0; i < userNumeber; i++)
-        {
-            backupId[i] = id[i];
-            strcpy(backupNome[i], nome[i]);
-            strcpy(backupEmail[i], email[i]);
-            strcpy(backupSexo[i], sexo[i]);
-            strcpy(backupEndereco[i], endereco[i]);
-            backupAltura[i] = altura[i];
-            backupVacina[i] = vacina[i];
-        }
-        backupUserNumber = userNumeber;
+
+int encerra(){//Encerra e se despede
+    printf("Agradecemos pela preferencia\n--A lista final de usuarios--");
+    for (int i = 0; i < quantidadeUser; i++){
+        printf("Cadastro ID: %d\nNome do usuario: %s\nEndereco: %s\nVacinado: %s\nAltura: %d\nE-mail: %s\nSexo: %s\n",IDUser[i], nomeUser[i], adressUser[i], vacina[i],alturaUser[i]);
     }
-    else if (backupOption == 2)
-    {
-        for (int i = 0; i < userNumeber; i++)
-        {
-            id[i] = backupId[i];
-            strcpy(nome[i], backupNome[i]);
-            strcpy(email[i], backupEmail[i]);
-            strcpy(sexo[i], backupSexo[i]);
-            strcpy(endereco[i], backupEndereco[i]);
-            altura[i] = backupAltura[i];
-            vacina[i] = backupVacina[i];
-        }
-        userNumeber = backupUserNumber;
-    }
+
+    return 0;
+}
+//Término das criações das funções
+
+int main(){
+
+
+    menu();
+
+    return 0;
 }
